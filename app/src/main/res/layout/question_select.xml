@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:orientation="vertical">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="60dp"
+        android:textSize="20dp"
+        android:fontFamily="@font/neom"
+        android:backgroundTint="@color/blue"
+        android:id="@+id/btn_student"
+        android:text="학생용 ‍🎓"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="20dp"
+        android:fontFamily="@font/neom"
+        android:layout_weight="1"
+        android:padding="60dp"
+        android:backgroundTint="@color/orange"
+        android:id="@+id/btn_parents"
+        android:text="학부모용 👨‍👩‍👧"/>
+
+</LinearLayout>
