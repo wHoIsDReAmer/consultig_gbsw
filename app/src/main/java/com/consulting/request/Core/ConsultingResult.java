@@ -12,4 +12,6 @@ public class ConsultingResult {
     public ConsultingResult(String title) {
         this.title = title;
     }
+
+    public
 }

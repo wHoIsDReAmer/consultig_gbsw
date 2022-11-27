@@ -235,7 +235,8 @@ public class QuestionBoxFragment extends Fragment {
         qb_when.addQuestion("아침시간")
                 .addQuestion("점심시간")
                 .addQuestion("저녁시간")
-                .addQuestion(new Question("기타", QuestionType.INPUT));
+                .addQuestion(new Question("기타", QuestionType.INPUT))
+                .addQuestion(new Question("뚱뚱아", QuestionType.DATE));
         addQuestionOnLayout(layout, qb_when);
 
 

@@ -23,7 +23,7 @@
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="20dp"
             android:fontFamily="@font/neol"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="60dp"
             android:text="첫 이용시 메일 인증이 필요합니다."/>
 
         <EditText

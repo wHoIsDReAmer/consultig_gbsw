@@ -88,8 +88,8 @@ public class RequestActivity extends AppCompatActivity {
 
         fmanager.beginTransaction().replace(R.id.questionBox, new QuestionSelect(this)).commit();
 
-        Intent i = new Intent(this, MailActivity.class);
-        startActivity(i);
+        //        Intent i = new Intent(this, MailActivity.class);
+//        startActivity(i);
     }
 
     public void toQuestionFragment(boolean isStudent) {
