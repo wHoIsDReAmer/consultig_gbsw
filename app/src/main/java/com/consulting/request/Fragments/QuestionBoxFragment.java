@@ -1,6 +1,7 @@
 package com.consulting.request.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -15,40 +16,72 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.consulting.request.Core.Question;
 import com.consulting.request.Core.QuestionBox;
 import com.consulting.request.Core.QuestionType;
+import com.consulting.request.Popup.DatePickerPopup;
 import com.consulting.request.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class QuestionBoxFragmentParents extends Fragment {
+public class QuestionBoxFragment extends Fragment {
+    private boolean isStudent = false;
+
     private HashMap<String, String> questionAnswer = new HashMap<>();
 
     private int backgroundColor = Color.WHITE;
     private int foregroundColor = 0;
 
-    private Context ctx;
-    public QuestionBoxFragmentParents(Context ctx) {
-        questionAnswer.put("__mode__", "parents");
-        this.ctx = ctx;
+    // ActivityResult ( for date pickup )
+    private TextView ar_tv;
+    private Question ar_qu;
+    private ActivityResultLauncher<Intent> ar_launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getData() == null) return;
 
-        TypedValue typedValue = new TypedValue();
-        ctx.getTheme().resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
-        foregroundColor = typedValue.data;
+                    int year = result.getData().getIntExtra("year", -1);
+                    int month = result.getData().getIntExtra("month", -1) + 1;
+                    int day = result.getData().getIntExtra("day", -1);
+
+                    ar_tv.setText(year + "-" + month + "-" + day);
+                    ar_qu.setValue(year + "-" + month + "-" + day);
+                }
+            }
+    );
+
+    private Context ctx;
+    public QuestionBoxFragment(Context ctx, boolean isStudent) {
+        this.ctx = ctx;
+        this.isStudent = isStudent;
+
+        if (!isStudent) { // Parents
+            questionAnswer.put("__mode__", "parents");
+            TypedValue typedValue = new TypedValue();
+            ctx.getTheme().resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
+            foregroundColor = typedValue.data;
+        } else { // Student
+            questionAnswer.put("__mode__", "student");
+            backgroundColor = Color.rgb(51, 132, 255);
+            foregroundColor = Color.WHITE;
+        }
+
     }
 
     private int dp(int value) {
@@ -107,8 +140,11 @@ public class QuestionBoxFragmentParents extends Fragment {
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                checkedId--; // sync the index
-                Question question = questionList.get(checkedId);
+                RadioButton radioButton = group.findViewById(checkedId);
+                int idx = group.indexOfChild(radioButton);
+                String text = radioButton.getText().toString();
+
+                Question question = box.getQuestion(text);
                 QuestionType type = question.getType();
 
                 switch (type) {
@@ -116,37 +152,56 @@ public class QuestionBoxFragmentParents extends Fragment {
                         questionAnswer.put(box.getTitle(), question.getText());
                         break;
                     case INPUT:
-                        if (specified.contains(checkedId))
+                        if (specified.contains(checkedId)) {
+                            questionAnswer.put(box.getTitle(), question.getValue());
                             break;
+                        }
 
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
-                        lp.setMargins(0, dp(17), 0, dp(17));
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
                         EditText ed = new EditText(ctx);
-                        ed.setLayoutParams(lp);
+                        ed.setTextSize(dp(7));
                         ed.setTextColor(foregroundColor);
-                        ed.setTypeface(ResourcesCompat.getFont(ctx, R.font.neor));
+                        ed.setTypeface(ResourcesCompat.getFont(ctx, R.font.neob));
+                        ed.setLayoutParams(lp);
+                        ed.setHint("여기에 입력해주세요!");
                         ed.getBackground().mutate().setColorFilter(foregroundColor, PorterDuff.Mode.SRC_ATOP);
-
-                        int finalCheckedId = checkedId;
                         ed.addTextChangedListener(new TextWatcher() {
                             @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
                             @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                rg.check(finalCheckedId+1);
-                                questionAnswer.put(box.getTitle(), s.toString());
+                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                rg.check(checkedId);
+                                question.setValue(charSequence.toString());
                             }
 
                             @Override
-                            public void afterTextChanged(Editable s) {}
+                            public void afterTextChanged(Editable editable) {}
                         });
-                        rg.addView(ed, checkedId+1);
+                        rg.addView(ed, idx + 1);
                         specified.add(checkedId);
                         break;
                     case DATE:
+                        if (specified.contains(checkedId)) {
+                            questionAnswer.put(box.getTitle(), question.getValue());
+                            break;
+                        }
 
+                        TextView tv = new TextView(ctx);
+                        tv.setText("글을 클릭해서 날짜를 선택해주세요!");
+                        tv.setTextColor(foregroundColor);
+                        tv.setPadding(dp(7), dp(7), dp(7), dp(7));
+                        tv.setTypeface(ResourcesCompat.getFont(ctx, R.font.neom));
+                        tv.setTextSize(dp(6));
+                        tv.setOnClickListener(e -> {
+                            Intent i = new Intent(ctx, DatePickerPopup.class);
+                            ar_tv = tv;
+                            ar_qu = question;
+                            ar_launcher.launch(i);
+                        });
+                        rg.addView(tv, idx + 1);
+                        specified.add(checkedId);
                         break;
                 }
             }
@@ -163,8 +218,10 @@ public class QuestionBoxFragmentParents extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.question_box_parents, container, false);
+        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.question_box, container, false);
 
+        ((TextView)layout.findViewById(R.id.textview_typeBox)).setText(isStudent ? "🎓 학생용" : "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67 학부모용");
+        
         QuestionBox qb_job = new QuestionBox("어떤 상담을 원하시나요?");
         qb_job.addQuestion("진로")
                 .addQuestion("진학")
@@ -172,13 +229,15 @@ public class QuestionBoxFragmentParents extends Fragment {
 
         addQuestionOnLayout(layout, qb_job);
 
+        QuestionBox qb_day = new QuestionBox("어떤 날에 상담을 진행할까요?");
+
         QuestionBox qb_when = new QuestionBox("상담 시간을 어떻게 할까요?");
         qb_when.addQuestion("아침시간")
                 .addQuestion("점심시간")
                 .addQuestion("저녁시간")
                 .addQuestion(new Question("기타", QuestionType.INPUT));
-
         addQuestionOnLayout(layout, qb_when);
+
 
         /* Don't touch this code */
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

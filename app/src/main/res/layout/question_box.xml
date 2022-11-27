@@ -11,5 +11,5 @@
         android:textSize="17dp"
         android:layout_margin="10dp"
         android:fontFamily="@font/neob"
-        android:text="👨‍👩‍👧 학부모용"/>
+        android:id="@+id/textview_typeBox"/>
 </LinearLayout>

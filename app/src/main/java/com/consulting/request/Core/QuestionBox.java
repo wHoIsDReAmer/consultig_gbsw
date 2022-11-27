@@ -30,8 +30,17 @@ public class QuestionBox {
         return this;
     }
 
-        public ArrayList<Question> getQuestionList() {
+    public ArrayList<Question> getQuestionList() {
         return this.qList;
+    }
+
+    public Question getQuestion(String name) {
+        for (Question q : qList) {
+            if (q.getText().equals(name))
+                return q;
+        }
+
+        return null;
     }
 
     public int getSelect() {

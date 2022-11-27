@@ -33,11 +33,11 @@ public class QuestionSelect extends Fragment {
         btn_parents = layout.findViewById(R.id.btn_parents);
 
         btn_student.setOnClickListener(e -> {
-            mainActivity.toQuestionFragmentStudent();
+            mainActivity.toQuestionFragment(true);
         });
 
         btn_parents.setOnClickListener(e -> {
-            mainActivity.toQuestionFragmentParents();
+            mainActivity.toQuestionFragment(false);
         });
         return layout;
     }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RequestActivity">
-
+    android:orientation="vertical"
+    tools:context=".RecentActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,32 +13,41 @@
         android:gravity="center_vertical">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_margin="10dp"
             android:src="@drawable/logo"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="6dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:textColor="#000000"
+                android:textColor="?android:textColorPrimary"
                 android:fontFamily="@font/neoh"
-                android:text="상담 신청하기"/>
-
+                android:text="상담 신청기록"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="경북소프트웨어고등학교"
                 android:textSize="16dp"
-                android:text="학부모용"/>
+                android:fontFamily="@font/neol"
+                android:textColor="@color/gray"/>
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:id="@+id/layout_body">
+
+
+    </LinearLayout>
 
 </LinearLayout>

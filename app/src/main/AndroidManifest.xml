@@ -22,6 +22,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".Popup.DatePickerPopup"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog"
+            android:exported="true"/>
+
+        <activity android:name=".RecentActivity"
+            android:exported="true"/>
+
+        <activity android:name=".MailActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

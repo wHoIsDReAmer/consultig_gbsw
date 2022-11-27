@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="50dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/logo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="20dp"
+            android:fontFamily="@font/neol"
+            android:layout_marginTop="20dp"
+            android:text="첫 이용시 메일 인증이 필요합니다."/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/bluebird"
+            android:fontFamily="@font/neor"
+            android:hint="메일을 입력해주세요!"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorPrimary"
+            android:fontFamily="@font/neor"
+            android:textSize="17dp"
+            android:padding="10dp"
+            android:id="@+id/mail_message"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/neoeb"
+            android:textColor="@color/white"
+            android:text="보내기"
+            android:id="@+id/btn_send"
+            android:backgroundTint="@color/bluebird"/>
+
+    </LinearLayout>
+
+</LinearLayout>
