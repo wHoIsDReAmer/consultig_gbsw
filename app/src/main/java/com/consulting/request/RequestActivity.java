@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.consulting.request.Fragments.QuestionBoxFragment;
 import com.consulting.request.Fragments.QuestionSelect;
+import com.consulting.request.Services.MainService;
+import com.consulting.request.Services.MainWorker;
 import com.google.android.material.navigation.NavigationView;
 
 import org.jsoup.Jsoup;
@@ -101,6 +103,11 @@ public class RequestActivity extends AppCompatActivity {
         });
 
         fmanager.beginTransaction().replace(R.id.questionBox, new QuestionSelect(this)).commit();
+
+        MainWorker.ctx = this;
+
+        Intent s = new Intent(this, MainService.class);
+        startService(s);
 
         if (sharedPreferences.getString("email", "hehe").equals("hehe")) {
             MailActivity.sharedPreferences = sharedPreferences;

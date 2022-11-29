@@ -32,6 +32,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'androidx.work:work-runtime:2.7.1'
     implementation files('..\\lib\\jsoup-1.15.3.jar')
     implementation files('..\\lib\\json-20220924.jar')
     testImplementation 'junit:junit:4.13.2'
