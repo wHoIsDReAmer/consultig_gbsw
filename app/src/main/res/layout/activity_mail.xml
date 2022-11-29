@@ -31,8 +31,19 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/bluebird"
             android:fontFamily="@font/neor"
+            android:id="@+id/edit_mail"
+            android:singleLine="true"
             android:hint="메일을 입력해주세요!"/>
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/bluebird"
+            android:fontFamily="@font/neor"
+            android:id="@+id/edit_code"
+            android:visibility="gone"
+            android:singleLine="true"
+            android:hint="인증코드를 입력해주세요!"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

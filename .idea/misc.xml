@@ -3,14 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/drawable/layout_recent_background.xml" value="0.249" />
         <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout-sw600dp/activity_request.xml" value="0.2" />
+        <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout/activity_mail.xml" value="0.264" />
         <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout/activity_main.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout/activity_request.xml" value="0.1" />
+        <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout/activity_recent.xml" value="0.1" />
+        <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout/activity_request.xml" value="0.264" />
         <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout/question_box.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout/question_box_parents.xml" value="0.2" />
         <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout/question_box_students.xml" value="0.1" />
         <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout/question_select.xml" value="0.2" />
         <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/layout/tags_question_box.xml" value="0.12132725430597771" />
+        <entry key="..\:/Users/WHOISLCW/AndroidStudioProjects/consulting/app/src/main/res/menu/drawer_menu.xml" value="0.24947916666666667" />
       </map>
     </option>
   </component>

@@ -8,8 +8,10 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,8 +21,11 @@ import com.consulting.request.Fragments.QuestionBoxFragment;
 import com.consulting.request.Fragments.QuestionSelect;
 import com.google.android.material.navigation.NavigationView;
 
+import org.jsoup.Jsoup;
+
 public class RequestActivity extends AppCompatActivity {
     private FragmentManager fmanager;
+    public static SharedPreferences sharedPreferences;
 
     private Context ctx = this;
 
@@ -41,7 +46,7 @@ public class RequestActivity extends AppCompatActivity {
         if (!isHome) {
             isHome = true;
             fmanager.beginTransaction()
-                    .setCustomAnimations(R.anim.to_left, R.anim.from_left)
+                    .setCustomAnimations(R.anim.fade, R.anim.none)
                     .replace(R.id.questionBox, new QuestionSelect(this))
                     .commit();
             return;
@@ -58,6 +63,7 @@ public class RequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
         fmanager = getSupportFragmentManager();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         getSupportActionBar().hide();
@@ -66,12 +72,20 @@ public class RequestActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent = new Intent(ctx, RecentActivity.class);
                 switch (item.getItemId()) {
-                    case R.id.btn_recent:
-                        Intent intent = new Intent(ctx, RecentActivity.class);
+                    case R.id.btn_recent_waiting:
+                        intent.putExtra("type", 0);
                         startActivity(intent);
                         break;
-
+                    case R.id.btn_recent_success:
+                        intent.putExtra("type", 1);
+                        startActivity(intent);
+                        break;
+                    case R.id.btn_recent_deny:
+                        intent.putExtra("type", 2);
+                        startActivity(intent);
+                        break;
                     default:
                         break;
                 }
@@ -88,15 +102,56 @@ public class RequestActivity extends AppCompatActivity {
 
         fmanager.beginTransaction().replace(R.id.questionBox, new QuestionSelect(this)).commit();
 
-        //        Intent i = new Intent(this, MailActivity.class);
-//        startActivity(i);
+        if (sharedPreferences.getString("email", "hehe").equals("hehe")) {
+            MailActivity.sharedPreferences = sharedPreferences;
+            Intent i = new Intent(this, MailActivity.class);
+            startActivity(i);
+        } else {
+            new Thread(() -> {
+                try {
+                    String result = Jsoup.connect("http://goalsdhkdwk.cafe24app.com/api/mail/checkValid")
+                            .header("Content-Type", "application/json")
+                            .header("Accept", "application/json")
+                            .ignoreContentType(true)
+                            .requestBody("{\"mail\":\"" + sharedPreferences.getString("email", "") + "\"}")
+                            .post()
+                            .toString();
+                    if (result.contains("false")) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "이메일 정보가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                        });
+                        sharedPreferences.edit().remove("email").apply();
+                        Intent i = Intent.makeRestartActivityTask(getPackageManager().getLaunchIntentForPackage(getPackageName()).getComponent());
+                        startActivity(i);
+                        System.exit(0);
+                    }
+                } catch (Exception e) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "서버에 연결할 수 없거나 알 수 없는 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+                    e.printStackTrace();
+                }
+            }).start();
+        }
     }
 
     public void toQuestionFragment(boolean isStudent) {
         fmanager.beginTransaction()
-                .setCustomAnimations(R.anim.to_left, R.anim.from_left)
+                .setCustomAnimations(R.anim.fade, R.anim.none)
                 .replace(R.id.questionBox, new QuestionBoxFragment(this, isStudent))
                 .commit();
         isHome = false;
+    }
+
+    public void toMainActivity() {
+        if (!isHome) {
+            isHome = true;
+            fmanager.beginTransaction()
+                    .setCustomAnimations(R.anim.fade, R.anim.none)
+                    .replace(R.id.questionBox, new QuestionSelect(this))
+                    .commit();
+            return;
+        }
     }
 }
