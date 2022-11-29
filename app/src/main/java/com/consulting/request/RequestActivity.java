@@ -46,7 +46,7 @@ public class RequestActivity extends AppCompatActivity {
         if (!isHome) {
             isHome = true;
             fmanager.beginTransaction()
-                    .setCustomAnimations(R.anim.fade, R.anim.none)
+                    .setCustomAnimations(R.anim.to_left, R.anim.from_left)
                     .replace(R.id.questionBox, new QuestionSelect(this))
                     .commit();
             return;
@@ -138,7 +138,7 @@ public class RequestActivity extends AppCompatActivity {
 
     public void toQuestionFragment(boolean isStudent) {
         fmanager.beginTransaction()
-                .setCustomAnimations(R.anim.fade, R.anim.none)
+                .setCustomAnimations(R.anim.to_left, R.anim.from_left)
                 .replace(R.id.questionBox, new QuestionBoxFragment(this, isStudent))
                 .commit();
         isHome = false;
@@ -148,7 +148,7 @@ public class RequestActivity extends AppCompatActivity {
         if (!isHome) {
             isHome = true;
             fmanager.beginTransaction()
-                    .setCustomAnimations(R.anim.fade, R.anim.none)
+                    .setCustomAnimations(R.anim.to_left, R.anim.from_left)
                     .replace(R.id.questionBox, new QuestionSelect(this))
                     .commit();
             return;

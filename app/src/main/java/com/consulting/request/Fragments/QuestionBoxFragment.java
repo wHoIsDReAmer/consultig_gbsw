@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -58,6 +59,7 @@ public class QuestionBoxFragment extends Fragment {
 
     private int backgroundColor = Color.WHITE;
     private int foregroundColor = 0;
+    private String uri;
 
     // ActivityResult ( for date pickup )
     private String ar_title;
@@ -95,9 +97,13 @@ public class QuestionBoxFragment extends Fragment {
                 ctx.getTheme().resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
                 foregroundColor = typedValue.data;
                 backgroundColor = Color.TRANSPARENT;
+
+                uri = "http://goalsdhkdwk.cafe24app.com/api/request/parentApply";
             } else { // Student
-                backgroundColor = Color.rgb(51, 132, 255);
+                backgroundColor = Color.argb(177, 51, 132, 255);
                 foregroundColor = Color.WHITE;
+
+                uri = "http://goalsdhkdwk.cafe24app.com/api/request/studentApply";
             }
         } catch (Exception _) {}
     }
@@ -303,7 +309,7 @@ public class QuestionBoxFragment extends Fragment {
                         button.setEnabled(false);
                         new Thread(() -> {
                             try {
-                                String requestResult = Jsoup.connect("http://goalsdhkdwk.cafe24app.com/api/request/apply")
+                                String requestResult = Jsoup.connect(uri)
                                         .header("content-type", "application/json")
                                         .header("accpet", "application/json")
                                         .ignoreContentType(true)
@@ -318,13 +324,13 @@ public class QuestionBoxFragment extends Fragment {
                                     });
                                 } else {
                                     ((Activity)ctx).runOnUiThread(() -> {
-                                        Toast.makeText(ctx, "상담 내용을 전달하였습니다.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ctx, "상담을 성공적으로 신청하였습니다.", Toast.LENGTH_SHORT).show();
                                         ((RequestActivity)ctx).toMainActivity();
                                     });
                                 }
                             } catch (Exception _) {
                                 ((Activity)ctx).runOnUiThread(() -> {
-                                    Toast.makeText(ctx, "상담을 전송하는 과정에서 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ctx, "상담을 신청하는 과정에서 문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
                                 });
                             }
                         }).start();

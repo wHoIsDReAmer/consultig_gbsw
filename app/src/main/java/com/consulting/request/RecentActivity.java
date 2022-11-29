@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -177,12 +178,8 @@ public class RecentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recent);
         getSupportActionBar().hide();
 
-        layout_swipe = findViewById(R.id.layout_swipe);
-        layout_body = findViewById(R.id.layout_body);
-
         ConsultingResult.Result type = types[getIntent().getIntExtra("type", 0)];
-
-        new Thread(() -> {
+        Thread load = new Thread(() -> {
             try {
                 String result = Jsoup.connect("http://goalsdhkdwk.cafe24app.com/api/get/studentRequestList")
                         .header("content-type", "application/json")
@@ -191,7 +188,15 @@ public class RecentActivity extends AppCompatActivity {
                         .requestBody("{\"mail\": \"" + RequestActivity.sharedPreferences.getString("email", "hehe") + "\"}")
                         .post()
                         .text();
-                JSONObject json = new JSONObject(result);
+
+                if (result.contains("false")) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "알 수 없는 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                    });
+                    return;
+                }
+
+                JSONObject json = new JSONObject(result).getJSONObject("data");
                 JSONArray json2 = null;
 
                 if (type == ConsultingResult.Result.WAITING)
@@ -209,7 +214,7 @@ public class RecentActivity extends AppCompatActivity {
                     String sid = _json.getString("student_number");
                     String consultingType = _json.getString("type");
                     String message = String.valueOf(_json.getString("teacher_suggest"));
-                    boolean is_parent = _json.getBoolean("is_parent");
+                    boolean is_parent = _json.getInt("is_parent") == 1 ? true : false;
 
                     ConsultingResult res = new ConsultingResult(type);
                     res.setDate(date + " " + time);
@@ -223,8 +228,75 @@ public class RecentActivity extends AppCompatActivity {
                     });
                 }
             } catch (Exception e) {
-
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "서버와 통신 중 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                });
             }
-        }).start();
+        });
+
+        layout_swipe = findViewById(R.id.layout_swipe);
+        layout_body = findViewById(R.id.layout_body);
+
+        layout_swipe.setOnRefreshListener(() -> {
+            new Thread(() -> {
+                try {
+                    String result = Jsoup.connect("http://goalsdhkdwk.cafe24app.com/api/get/studentRequestList")
+                            .header("content-type", "application/json")
+                            .header("accept", "application/json")
+                            .ignoreContentType(true)
+                            .requestBody("{\"mail\": \"" + RequestActivity.sharedPreferences.getString("email", "hehe") + "\"}")
+                            .post()
+                            .text();
+
+                    if (result.contains("false")) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "알 수 없는 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        });
+                        return;
+                    }
+
+                    JSONObject json = new JSONObject(result).getJSONObject("data");
+                    JSONArray json2 = null;
+
+                    if (type == ConsultingResult.Result.WAITING)
+                        json2 = json.getJSONArray("waiting");
+                    else if (type == ConsultingResult.Result.SUCCESS)
+                        json2 = json.getJSONArray("success");
+                    else
+                        json2 = json.getJSONArray("deny");
+
+                    for (int i = 0; i < json2.length(); i++) {
+                        JSONObject _json = json2.getJSONObject(i);
+                        String time = _json.getString("time");
+                        String date = _json.getString("date");
+                        String name = _json.getString("student_name");
+                        String sid = _json.getString("student_number");
+                        String consultingType = _json.getString("type");
+                        String message = String.valueOf(_json.getString("teacher_suggest"));
+                        boolean is_parent = _json.getInt("is_parent") == 1 ? true : false;
+
+                        ConsultingResult res = new ConsultingResult(type);
+                        res.setDate(date + " " + time);
+                        res.setName(name);
+                        res.setSid(sid);
+                        res.setConsultingType(consultingType);
+                        res.setMessage(message);
+                        res.setParents(is_parent);
+                        runOnUiThread(() -> {
+                            addRecentOnLayout(layout_body, res);
+                        });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "서버와 통신 중 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }).start();
+            layout_swipe.setRefreshing(false);
+        });
+
+        load.start();
     }
 }
