@@ -181,7 +181,7 @@ public class RecentActivity extends AppCompatActivity {
         ConsultingResult.Result type = types[getIntent().getIntExtra("type", 0)];
         Thread load = new Thread(() -> {
             try {
-                String result = Jsoup.connect("http://goalsdhkdwk.cafe24app.com/api/get/studentRequestList")
+                String result = Jsoup.connect("http://goalsdhkdwk.cafe24app.com/api/get/userRequestList")
                         .header("content-type", "application/json")
                         .header("accept", "application/json")
                         .ignoreContentType(true)

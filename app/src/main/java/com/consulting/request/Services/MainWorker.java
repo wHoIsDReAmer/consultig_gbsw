@@ -51,7 +51,7 @@ public class MainWorker {
                     if (email.isEmpty())
                         continue;
 
-                    String result = Jsoup.connect("http://goalsdhkdwk.cafe24app.com/api/get/studentRequestList")
+                    String result = Jsoup.connect("http://goalsdhkdwk.cafe24app.com/api/get/userRequestList")
                             .header("content-type", "application/json")
                             .header("accept", "application/json")
                             .ignoreContentType(true)
