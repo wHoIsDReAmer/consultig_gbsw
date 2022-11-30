@@ -98,10 +98,6 @@ public class MailActivity extends AppCompatActivity {
                         } else {
                             runOnUiThread(() -> {
                                 Toast.makeText(this, "인증 실패..", Toast.LENGTH_SHORT).show();
-                                edit_mail.setVisibility(View.VISIBLE);
-                                edit_code.setVisibility(View.GONE);
-                                btn_send.setText("보내기");
-                                message.setText("");
                             });
                         }
                     } catch (Exception ignore) {

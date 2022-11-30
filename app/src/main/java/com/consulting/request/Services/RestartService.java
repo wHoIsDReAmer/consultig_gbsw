@@ -27,8 +27,8 @@ public class RestartService extends Service {
     }
 
     public int onStartCommand(Intent intent, int flag, int startId) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default");
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "기본 채널");
+        builder.setSmallIcon(R.mipmap.consulting_logo);
         builder.setContentTitle(null);
         builder.setContentText(null);
 

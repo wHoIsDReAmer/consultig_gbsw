@@ -74,7 +74,7 @@ public class MainWorker {
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, "alarm");
                         builder.setContentTitle("상담이 수락되었습니다.");
                         builder.setContentText("자세한 내용을 보려면 클릭해주세요.");
-                        builder.setSmallIcon(R.mipmap.ic_launcher);
+                        builder.setSmallIcon(R.mipmap.consulting_logo);
 
                         Intent i = new Intent(ctx, RequestActivity.class);
                         PendingIntent pdi = PendingIntent.getActivity(ctx, 0, i, PendingIntent.FLAG_IMMUTABLE);

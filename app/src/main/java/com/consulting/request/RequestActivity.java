@@ -130,7 +130,7 @@ public class RequestActivity extends AppCompatActivity {
                         sharedPreferences.edit().remove("email").apply();
                         Intent i = Intent.makeRestartActivityTask(getPackageManager().getLaunchIntentForPackage(getPackageName()).getComponent());
                         startActivity(i);
-                        System.exit(0);
+                        finish();
                     }
                 } catch (Exception e) {
                     runOnUiThread(() -> {
