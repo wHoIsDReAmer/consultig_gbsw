@@ -52,7 +52,7 @@ public class RecentActivity extends AppCompatActivity {
         if (res.getType() == ConsultingResult.Result.WAITING)
             gd.setColor(Color.rgb(94, 94, 94));
         else if (res.getType() == ConsultingResult.Result.SUCCESS)
-            gd.setColor(Color.rgb(51, 255, 122));
+            gd.setColor(Color.rgb(51, 225, 122));
         else gd.setColor(Color.rgb(255, 81, 51));
         gd.setCornerRadius(dp(5));
         layout.setBackground(gd);
